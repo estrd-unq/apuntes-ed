@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>apunte-haskell.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="apunte-primeros-pasos-en-haskell">Apunte: primeros pasos en Haskell</h1>
+<ul>
+<li><a href="#apunte-primeros-pasos-en-haskell">Apunte: primeros pasos en Haskell</a></li>
+<li><a href="#introducci%C3%B3n">Introducción</a></li>
+<li><a href="#herramientas-para-desarrollar">Herramientas para desarrollar</a>
+<ul>
+<li><a href="#instalaci%C3%B3n-de-un-editor-de-texto">Instalación de un editor de texto</a></li>
+<li><a href="#instalaci%C3%B3n-de-un-int%C3%A9rprete-de-haskell">Instalación de un intérprete de Haskell</a></li>
+</ul>
+</li>
+<li><a href="#lenguaje-haskell">Lenguaje Haskell</a>
+<ul>
+<li><a href="#tipos-de-datos-b%C3%A1sicos">Tipos de datos básicos</a></li>
+<li><a href="#operaciones-sobre-tipos-de-datos-b%C3%A1sicos">Operaciones sobre tipos de datos básicos</a>
+<ul>
+<li><a href="#operaciones-sobre-int">Operaciones sobre Int</a></li>
+<li><a href="#operaciones-sobre-bool">Operaciones sobre Bool</a></li>
+<li><a href="#operaciones-sobre-char-y-string">Operaciones sobre Char y String</a></li>
+<li><a href="#operaciones-gen%C3%A9ricas-de-comparaci%C3%B3n">Operaciones genéricas de comparación</a></li>
+</ul>
+</li>
+<li><a href="#estructuras-de-datos-b%C3%A1sicas">Estructuras de datos básicas</a>
+<ul>
+<li><a href="#operaciones-sobre-tuplas">Operaciones sobre tuplas</a></li>
+<li><a href="#operaciones-sobre-listas">Operaciones sobre listas</a>
+<ul>
+<li><a href="#operaciones-que-generan-listas">Operaciones que generan listas</a></li>
+<li><a href="#operaciones-inspectoras-sobre-listas">Operaciones inspectoras sobre listas</a></li>
+<li><a href="#operaciones-adicionales-sobre-listas">Operaciones adicionales sobre listas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#definiciones-de-constantes-y-funciones">Definiciones de constantes y funciones</a>
+<ul>
+<li><a href="#declaraciones-de-tipos-de-definiciones">Declaraciones de tipos de definiciones</a></li>
+<li><a href="#alternativa-condicional">Alternativa condicional</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#preguntas-frecuentes">Preguntas frecuentes</a>
+<ul>
+<li><a href="#c%C3%B3mo-puedo-seguir-la-ejecuci%C3%B3n-de-un-programa">¿Cómo puedo seguir la ejecución de un programa?</a></li>
+<li><a href="#comparado-con-otros-lenguajes-de-programaci%C3%B3n-a-los-que-estoy-acostumbrado-como-javascript-python-java-gobstones-etc-por-qu%C3%A9-en-haskell-los-par%C3%A9ntesis-se-utilizan-de-forma-diferente">Comparado con otros lenguajes de programación a los que estoy acostumbrado (como Javascript, Python, Java, Gobstones, etc.), ¿Por qué en Haskell los paréntesis se utilizan de forma diferente?</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="introducci%C3%B3n">Introducción</h1>
+<p>Haskell es un lenguaje de programación funcional. Su principal característica radica en que los programas están constituidos de una serie de definiciones de constantes y funciones, y la ejecución de un programa consistente simplemente de evaluar una expresión.</p>
+<p>En esta materia utilizaremos Haskell durante la primera parte.</p>
+<h1 id="herramientas-para-desarrollar">Herramientas para desarrollar</h1>
+<h2 id="instalaci%C3%B3n-de-un-editor-de-texto">Instalación de un editor de texto</h2>
+<p>Antes de arrancar a programar, tendrás que contar con un editor de texto moderno. Recomendamos <a href="https://code.visualstudio.com/">VSCode</a> o <a href="https://www.sublimetext.com/">Sublime Text</a>.</p>
+<h2 id="instalaci%C3%B3n-de-un-int%C3%A9rprete-de-haskell">Instalación de un intérprete de Haskell</h2>
+<p>Para poder evaluar programas Haskell utilizaremos un
+<a href="https://es.wikipedia.org/wiki/Int%C3%A9rprete_(inform%C3%A1tica)">intérprete</a>. En esta materia recomendamos usar <a href="https://www.haskell.org/hugs/downloads/2006-05/WinHugs-May2006.exe">WinHugs</a> (en Windows), o <a href="https://howtoinstall.co/es/ubuntu/xenial/hugs">Hugs</a> (en Linux). En el caso de Windows, recomendamos <em>ejecutar como administrador</em> el instalador de WinHugs.</p>
+<p>Si tenés Mac, o alguna distribución de Linux que no ofrece Hugs, te recomendamos utilizar GHCi, pero vía <a href="https://docs.haskellstack.org/en/stable/README/">stack</a>. Una vez instalada esa herramienta, podés cargar desde la consola un programa mediante el comando <code>stack ghci &lt;archivo&gt;</code>.</p>
+<h1 id="lenguaje-haskell">Lenguaje Haskell</h1>
+<h2 id="tipos-de-datos-b%C3%A1sicos">Tipos de datos básicos</h2>
+<p>En esta materia utilizaremos frecuentemente los siguientes tipos básicos de Haskell:</p>
+<ul>
+<li><strong>Int</strong>, que representa a los números enteros, como <code>1</code>, <code>-1</code>, <code>2</code>, <code>0</code>, <code>5</code>, etc.</li>
+<li><strong>Bool</strong>, que representa los valores de verdad. Sus posibles valores son <code>True</code> y <code>False</code>.</li>
+<li><strong>String</strong>, que representa cadenas de caracteres, y se escriben entre comillas dobles. Ejemplo: <code>&quot;hola&quot;</code>, <code>&quot;auto&quot;</code>, <code>&quot;casa&quot;</code>.</li>
+<li><strong>Char</strong>, que representa a los caracteres individuales, y se escriben entre comillas simples. Ejemplo: <code>'a'</code>, <code>'b'</code>, <code>'c'</code>, etc. Como veremos más adelante, los <strong>String</strong> son listas de <strong>Char</strong>.</li>
+</ul>
+<p>Cabe destacar que existen otros tipos (como <code>Float</code>, que representa números racionales), pero que no vamos a utilizar.</p>
+<h2 id="operaciones-sobre-tipos-de-datos-b%C3%A1sicos">Operaciones sobre tipos de datos básicos</h2>
+<p>Los tipos básicos cuentan con operaciones ya definidas. A continuación enumeramos las que utilizaremos en la materia.</p>
+<h3 id="operaciones-sobre-int">Operaciones sobre Int</h3>
+<p>Para los números enteros contamos con las operaciones <code>+</code> (suma), <code>-</code> (resta), <code>*</code> (multiplicación) y <code>div</code> (división entera).</p>
+<p>Ejemplos:</p>
+<pre class="hljs"><code><div>Hugs&gt; 1 + 1
+2
+Hugs&gt; 2 * 3
+6
+Hugs&gt; 6 - 5
+1
+Hugs&gt; div 10 2
+5
+</div></code></pre>
+<h3 id="operaciones-sobre-bool">Operaciones sobre Bool</h3>
+<p>Para los booleanos contamos con las operaciones <code>&amp;&amp;</code> (conjunción), <code>||</code> (disyunción) y <code>not</code> (negación).</p>
+<pre class="hljs"><code><div>Hugs&gt; True &amp;&amp; False
+False
+Hugs&gt; False || True
+True
+Hugs&gt; not True
+False
+Hugs&gt; not (True || True)
+False
+</div></code></pre>
+<h3 id="operaciones-sobre-char-y-string">Operaciones sobre Char y String</h3>
+<p>Las únicas operaciones interesantes sobre <code>Char</code> son <code>succ</code> y <code>pred</code>, que, siguiendo un orden basado en <a href="https://elcodigoascii.com.ar/">ASCII</a>, nos dan el siguiente o anterior <code>Char</code>.</p>
+<p>Para <code>String</code>, dado que son listas de <code>Char</code>, utilizaremos las mismas funciones sobre listas, descritas más adelante.</p>
+<h3 id="operaciones-gen%C3%A9ricas-de-comparaci%C3%B3n">Operaciones genéricas de comparación</h3>
+<p>A todos los tipos ya descritos, podemos aplicarles las operaciones de comparación usuales: <code>==</code> (igualdad), <code>/=</code> (desigualdad), <code>&lt;</code> (menor), <code>&gt;</code> (mayor), <code>&lt;=</code> (menor o igual), <code>&gt;=</code> (mayor o igual).</p>
+<h2 id="estructuras-de-datos-b%C3%A1sicas">Estructuras de datos básicas</h2>
+<p>Además, utilizaremos dos estructuras de datos que vienen con Haskell:</p>
+<ul>
+<li><strong>Tuplas</strong>, que usaremos para armar pares entre distintos tipos de expresiones. Ejemplos: <code>(1,2)</code>, <code>(&quot;Jorge&quot;, 32)</code>, <code>(True, 10)</code>, etc. Notar que <em>los tipos de las componentes de las tuplas NO son necesariamente iguales</em>, aunque pueden serlo.</li>
+<li><strong>Listas</strong>, que utilizaremos para listar una serie de elementos. Ejemplos: <code>[1,2,3]</code>, <code>[True, False]</code>, <code>['c','a','s','a']</code> (que equivale a <code>&quot;casa&quot;</code>). Notar que <em>los elementos que componen una lista deben ser de un mismo tipo</em> (no podemos formar listas de diferentes tipos de expresiones).</li>
+</ul>
+<h3 id="operaciones-sobre-tuplas">Operaciones sobre tuplas</h3>
+<p>Existen solamente dos operaciones posibles <code>fst</code> y <code>snd</code>.</p>
+<p>Ejemplos:</p>
+<pre class="hljs"><code><div>Hugs&gt; fst (1, True)
+1
+Hugs&gt; snd (32, &quot;Jorge&quot;)
+&quot;Jorge&quot;
+</div></code></pre>
+<h3 id="operaciones-sobre-listas">Operaciones sobre listas</h3>
+<h4 id="operaciones-que-generan-listas">Operaciones que generan listas</h4>
+<p>La operación principal para generar listas de elementos será <code>:</code>, y que llamamos <em>cons</em>. Dicha operación toma primero un elemento y luego una lista, y <em>forma una nueva lista</em> con dicho elemento agregado al principio.</p>
+<p>Ejemplos:</p>
+<pre class="hljs"><code><div>Hugs&gt; 10 : [25,30]
+[10,25,30]
+Hugs&gt; True : []
+[True]
+Hugs&gt; 1 : 2 : 3 : []
+[1,2,3]
+Hugs&gt; 'c' : &quot;asa&quot;
+&quot;casa&quot;
+</div></code></pre>
+<p>Recordar que en Haskell las operaciones NO pueden modificar las expresiones tomadas por parámetro, dado que son inmutables, por lo que siempre devuelven nuevas expresiones.</p>
+<p>Más adelante también veremos que esta operación es de alguna manera especial, y nos ayudará a definir funciones sobre listas.</p>
+<p>Por otra parte también contamos con <code>++</code>, que llamamos <em>append</em>. Dicha operación toma dos listas, y las concatena respetando el orden de los argumentos.</p>
+<p>Ejemplos:</p>
+<pre class="hljs"><code><div>Hugs&gt; [1,2,3] ++ [4,5,6]
+[1,2,3,4,5,6]
+Hugs&gt; [True, False] ++ []
+[True,False]
+Hugs&gt; &quot;ca&quot; ++ &quot;sa&quot;
+&quot;casa&quot;
+</div></code></pre>
+<h4 id="operaciones-inspectoras-sobre-listas">Operaciones inspectoras sobre listas</h4>
+<p>Existen otras operaciones que nos devuelven información sobre una lista. Las principales son las siguientes:</p>
+<ul>
+<li><code>null</code>, que dada una lista nos indica si se encuentra vacía</li>
+<li><code>head</code>, que dada una lista nos devuelve su primer elemento</li>
+<li><code>tail</code>, que dada una lista nos retorna la lista sin su primer elemento</li>
+</ul>
+<p>Ejemplos:</p>
+<pre class="hljs"><code><div>Hugs&gt; null []
+True
+Hugs&gt; null [1,2,3]
+False
+Hugs&gt; head [1,2,3]
+1
+Hugs&gt; tail [1,2,3]
+[2,3]
+</div></code></pre>
+<h4 id="operaciones-adicionales-sobre-listas">Operaciones adicionales sobre listas</h4>
+<p>Existen más operaciones sobre listas que ya vienen con Haskell. Entre éstas, utilizaremos generalmente las siguientes:</p>
+<ul>
+<li><code>length</code>, que toma una lista y devuelve su tamaño.</li>
+<li><code>minimum</code> y <code>maximum</code>, que toman listas y nos devuelve el mínimo o máximo elemento respectivamente.</li>
+<li><code>last</code>, que toma una lista y nos devuelve el último elemento</li>
+<li>etc.</li>
+</ul>
+<h2 id="definiciones-de-constantes-y-funciones">Definiciones de constantes y funciones</h2>
+<p>Como dijimos anteriormente, el código fuente de un programa Haskell consiste de una <strong>serie de definiciones de constantes y funciones</strong>. La extensión de los archivos debe ser <code>.hs</code>.</p>
+<p>Por ejemplo, el siguiente puede ser un archivo llamado <code>main.hs</code></p>
+<pre class="hljs"><code><div>-- Esta es una función que toma un número y devuelve su siguiente
+sucesor :: Int -&gt; Int
+sucesor x = x + 1
+
+-- Esta es una función que toma un número y devuelve su doble
+doble :: Int -&gt; Int
+doble x = x * 2
+
+-- Esta es una función que toma dos números y devuelve el menor
+minimo :: Int -&gt; Int -&gt; Int
+minimo x y = 
+  if x &lt; y
+     then x
+     else y
+
+-- Esta es una constante, que equivale a 10
+diez :: Int
+diez = 10
+</div></code></pre>
+<p>Que si cargamos en el intérprete, nos permitirá ejecutar lo siguiente</p>
+<pre class="hljs"><code><div>Hugs&gt; minimo (sucesor 20) (doble 2 + diez)
+14
+</div></code></pre>
+<h3 id="declaraciones-de-tipos-de-definiciones">Declaraciones de tipos de definiciones</h3>
+<p>Como podrás observar en el ejemplo anterior, indicamos qué tipo de parámetro aceptamos y qué tipo de expresión devuelve cada función definida.</p>
+<p>Por ejemplo, <code>sucesor</code> toma un <code>Int</code> y devuelve un <code>Int</code>. Eso se indica de la siguiente manera <code>sucesor :: Int -&gt; Int</code>, antes de comenzar con la definición de la función.</p>
+<p>En el caso de la función <code>minimo</code>, toma dos <code>Int</code> para devolver un <code>Int</code>, y por eso anotamos <code>minimo :: Int -&gt; Int -&gt; Int</code>. Puede observarse que la cantidad de flechas en esa declaración coincide con la cantidad de parámetros.</p>
+<h3 id="alternativa-condicional">Alternativa condicional</h3>
+<p>Como también habrás podido notar, en la función <code>minimo</code> utilizamos una alternativa condicional.</p>
+<p>La forma de la alternativa condicional es la siguiente:</p>
+<pre class="hljs"><code><div>if &lt;expresión booleana&gt;
+   then &lt;expresión de algún tipo&gt;
+   else &lt;expresión del mismo tipo que la rama anterior&gt;
+</div></code></pre>
+<p>Cabe aclarar que en Haskell <em>la alternativa condicional es una expresión</em>, por lo que no podemos omitir la rama <code>else</code>. En otras palabras, simplemente elije entre una expresión u otra analizando el valor resultante de evaluar una expresión booleana.</p>
+<h1 id="preguntas-frecuentes">Preguntas frecuentes</h1>
+<h2 id="%C2%BFc%C3%B3mo-puedo-seguir-la-ejecuci%C3%B3n-de-un-programa">¿Cómo puedo seguir la ejecución de un programa?</h2>
+<p>A esta altura habrás notado que el flujo de ejecución de un programa Haskell es ligeramente más abstracto que el de los programas immperativos, dado que simplemente nos importa el valor resultante de evaluar una expresión, y no exactamente cómo dicha expresión fue evaluada.</p>
+<p>Si te encontrás necesitando pensar cómo el intérprete evalúa una expresión dada, podés pensar que lo hace como vos cuando necesitás resolver una cuenta matemática. Es decir, utiliza las definiciones dadas para poder reducir lo máximo posible la expresión, y así obtener un valor resultante (algo que ya no puede seguir evaluando).</p>
+<p>Siguiente el ejemplo <code>minimo (sucesor 20) (doble 2 + diez)</code>, podemos pensar en posibles pasos de evaluación, que no necesariamente son los mismos que hará el intérprete, pero que nos pueden ayudar a razonar cómo llegar a un resultado:</p>
+<pre class="hljs"><code><div>minimo (sucesor 20) (doble 2 + diez)
+-&gt; (se aplica la definicion de sucesor)
+minimo 21 (doble 2 + diez)
+-&gt; (se aplica la definición de doble)
+minimo 21 (4 + diez)
+-&gt; (se aplica la definicion de diez)
+minimo 21 (4 + 10)
+-&gt; (se realiza una suma)
+minimo 21 14
+-&gt; (se aplica la definicion de minimo)
+14
+</div></code></pre>
+<p>Como podrás observar, podríamos haber elegido otros caminos, y llegado al mismo resultado. Si bien esto no siempre es así, y en programas más complejos existirán caminos que pueden resultar en un error, en esta materia no nos interesará profundizar en este aspecto, y evaluaremos expresiones siguiendo los pasos que más nos convengan.</p>
+<h2 id="comparado-con-otros-lenguajes-de-programaci%C3%B3n-a-los-que-estoy-acostumbrado-como-javascript-python-java-gobstones-etc-%C2%BFpor-qu%C3%A9-en-haskell-los-par%C3%A9ntesis-se-utilizan-de-forma-diferente">Comparado con otros lenguajes de programación a los que estoy acostumbrado (como Javascript, Python, Java, Gobstones, etc.), ¿Por qué en Haskell los paréntesis se utilizan de forma diferente?</h2>
+<p>Seguramente estés acostumbrado a que los paréntesis se utilizan para agrupar los argumentos de los llamados a funciones, como en Gobstones el caso de <code>PonerN(10, Rojo)</code>.</p>
+<p>En Haskell los valores se pasan separados por espacios, y los paréntesis se utilizan para agrupar expresiones de la misma forma que en matemática.</p>
+<p>Por ejemplo, si tenemos la expresión <code>1 + 2 * 3</code>, sabemos que existe una predencia entre los operadores, y que los paréntesis, si los explicitaramos, serían <code>1 + (2 * 3)</code>. Si quisiéramos realizar la suma entre 1 y 2, y luego multiplicar, utilizaríamos los paréntesis de esta manera: <code>(1 + 2) * 3</code>.</p>
+<p>De forma similar, en la expresión <code>sucesor (doble 20)</code>, utilizamos paréntesis, no para aplicar un parámetro a <code>sucesor</code>, sino para asociar primero la función <code>doble</code> con su argumento <code>20</code>. Si no hiciéramos esto, y escribiésemos <code>sucesor doble 20</code>, Haskell interpretaría que los términos <code>doble</code> como <code>20</code> son argumento de <code>sucesor</code>, informando un error de tipos.</p>
+
+</body>
+</html>
